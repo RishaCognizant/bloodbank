@@ -1,0 +1,82 @@
+<div class="page-container">
+  <div class="page-header">
+    <h1><mat-icon>person</mat-icon> My Profile</h1>
+  </div>
+
+  <div class="profile-layout">
+    <!-- Profile Card -->
+    <mat-card class="profile-summary">
+      <mat-card-content>
+        <div class="avatar-container">
+          <div class="avatar">{{ auth.currentUser?.firstName?.charAt(0) }}{{ auth.currentUser?.lastName?.charAt(0) }}</div>
+          <h2>{{ auth.currentUser?.firstName }} {{ auth.currentUser?.lastName }}</h2>
+          <p>{{ auth.currentUser?.email }}</p>
+          <span class="blood-group-chip" *ngIf="auth.currentUser?.bloodGroup">{{ auth.currentUser?.bloodGroup }}</span>
+        </div>
+        <mat-divider></mat-divider>
+        <div class="info-list">
+          <div class="info-item"><mat-icon>badge</mat-icon> <span>{{ auth.currentUser?.role }}</span></div>
+          <div class="info-item"><mat-icon>email</mat-icon> <span>{{ auth.currentUser?.email }}</span></div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Edit Form -->
+    <mat-card class="edit-form">
+      <mat-card-header>
+        <mat-card-title>Edit Profile</mat-card-title>
+        <mat-card-subtitle>Update your personal information</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <form [formGroup]="form" (ngSubmit)="saveProfile()">
+          <div class="form-row">
+            <mat-form-field appearance="outline">
+              <mat-label>First Name</mat-label>
+              <input matInput formControlName="firstName">
+              <mat-icon matPrefix>person</mat-icon>
+              <mat-error>Required</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Last Name</mat-label>
+              <input matInput formControlName="lastName">
+              <mat-error>Required</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline">
+              <mat-label>Phone Number</mat-label>
+              <input matInput formControlName="phone">
+              <mat-icon matPrefix>phone</mat-icon>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Blood Group</mat-label>
+              <mat-select formControlName="bloodGroup">
+                <mat-option *ngFor="let bg of bloodGroups" [value]="bg">{{ bg }}</mat-option>
+              </mat-select>
+              <mat-icon matPrefix>bloodtype</mat-icon>
+            </mat-form-field>
+          </div>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Address</mat-label>
+            <input matInput formControlName="address">
+            <mat-icon matPrefix>home</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>City</mat-label>
+            <input matInput formControlName="city">
+            <mat-icon matPrefix>location_city</mat-icon>
+          </mat-form-field>
+
+          <button mat-raised-button color="primary" type="submit" [disabled]="loading" class="save-btn">
+            <mat-spinner diameter="18" *ngIf="loading"></mat-spinner>
+            <mat-icon *ngIf="!loading">save</mat-icon>
+            {{ loading ? 'Saving...' : 'Save Changes' }}
+          </button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

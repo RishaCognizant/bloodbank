@@ -1,0 +1,89 @@
+<div class="page-container">
+  <div class="welcome-banner">
+    <div>
+      <h1>Welcome back, {{ auth.currentUser?.firstName }}! 👋</h1>
+      <p>Help save lives. Every drop counts.</p>
+    </div>
+    <div class="quick-actions">
+      <button mat-raised-button color="accent" routerLink="/user/request-blood">
+        <mat-icon>bloodtype</mat-icon> Request Blood
+      </button>
+      <button mat-raised-button routerLink="/user/donation-history">
+        <mat-icon>volunteer_activism</mat-icon> Schedule Donation
+      </button>
+    </div>
+  </div>
+
+  <!-- Stats Row -->
+  <div class="stats-row" *ngIf="stats">
+    <mat-card class="stat-mini">
+      <mat-icon class="icon-blue">list_alt</mat-icon>
+      <div class="stat-value">{{ stats.totalRequests }}</div>
+      <div class="stat-label">My Requests</div>
+    </mat-card>
+    <mat-card class="stat-mini">
+      <mat-icon class="icon-orange">pending</mat-icon>
+      <div class="stat-value">{{ stats.pendingRequests }}</div>
+      <div class="stat-label">Pending</div>
+    </mat-card>
+    <mat-card class="stat-mini">
+      <mat-icon class="icon-green">check_circle</mat-icon>
+      <div class="stat-value">{{ stats.approvedRequests }}</div>
+      <div class="stat-label">Approved</div>
+    </mat-card>
+    <mat-card class="stat-mini">
+      <mat-icon class="icon-red">volunteer_activism</mat-icon>
+      <div class="stat-value">{{ stats.completedDonations }}</div>
+      <div class="stat-label">Donations</div>
+    </mat-card>
+  </div>
+
+  <div class="two-col">
+    <!-- Recent Requests -->
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Recent Requests</mat-card-title>
+        <div class="spacer"></div>
+        <a mat-button routerLink="/user/my-requests" color="primary">View All</a>
+      </mat-card-header>
+      <mat-card-content>
+        <div *ngIf="recentRequests.length === 0" class="empty-state">
+          <mat-icon>hourglass_empty</mat-icon>
+          <p>No requests yet. <a routerLink="/user/request-blood">Create one</a></p>
+        </div>
+        <div class="request-list">
+          <div *ngFor="let r of recentRequests" class="request-item">
+            <div class="request-left">
+              <span class="blood-group-chip">{{ r.bloodGroup }}</span>
+              <div>
+                <div class="patient-name">{{ r.patientName }}</div>
+                <div class="hospital">{{ r.hospital }}</div>
+              </div>
+            </div>
+            <div class="request-right">
+              <span class="status-badge" [class]="r.status">{{ r.status }}</span>
+              <div class="req-date">{{ r.requestDate | date:'shortDate' }}</div>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Blood Availability -->
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Blood Availability</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="availability-grid">
+          <div *ngFor="let item of inventory" class="availability-item"
+               [class.low]="item.units <= 10" [class.empty]="item.units === 0">
+            <span class="bg-name">{{ item.bloodGroup }}</span>
+            <span class="bg-units" [class.text-red]="item.units <= 10">{{ item.units }}</span>
+            <span class="bg-label">units</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

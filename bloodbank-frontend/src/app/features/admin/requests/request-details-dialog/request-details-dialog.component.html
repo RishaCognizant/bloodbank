@@ -1,0 +1,118 @@
+<div class="dialog-container">
+  <div class="dialog-header" [class.pending]="request.status === 'PENDING'" 
+       [class.approved]="request.status === 'APPROVED'" 
+       [class.rejected]="request.status === 'REJECTED'">
+    <mat-icon class="header-icon">
+      {{ request.status === 'APPROVED' ? 'check_circle' : request.status === 'REJECTED' ? 'cancel' : 'pending_actions' }}
+    </mat-icon>
+    <div class="header-text">
+      <h2>Request #{{ request.id }}</h2>
+      <span class="status-badge" [class]="request.status">{{ request.status }}</span>
+    </div>
+    <button mat-icon-button class="close-btn" (click)="close()" matTooltip="Close">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <mat-dialog-content class="dialog-body">
+    <!-- Emergency Badge -->
+    <div class="emergency-banner" *ngIf="request.emergency">
+      <mat-icon>warning</mat-icon>
+      <span>EMERGENCY REQUEST</span>
+      <span class="severity-chip" [class]="severityClass" *ngIf="request.severity">
+        {{ request.severity }}
+      </span>
+    </div>
+
+    <!-- Requester Information -->
+    <div class="section">
+      <h3><mat-icon>person</mat-icon> Requester Information</h3>
+      <div class="info-grid">
+        <div class="info-item">
+          <span class="label">Name</span>
+          <span class="value">{{ request.user.firstName }} {{ request.user.lastName }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Email</span>
+          <span class="value">{{ request.user.email }}</span>
+        </div>
+        <div class="info-item" *ngIf="request.user.phone">
+          <span class="label">Phone</span>
+          <span class="value">{{ request.user.phone }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Patient & Blood Details -->
+    <div class="section">
+      <h3><mat-icon>local_hospital</mat-icon> Patient & Blood Details</h3>
+      <div class="info-grid">
+        <div class="info-item">
+          <span class="label">Patient Name</span>
+          <span class="value">{{ request.patientName }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Blood Group</span>
+          <span class="value">
+            <span class="blood-badge">{{ request.bloodGroup }}</span>
+          </span>
+        </div>
+        <div class="info-item">
+          <span class="label">Units Required</span>
+          <span class="value highlight">{{ request.units }} units</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Hospital</span>
+          <span class="value">{{ request.hospital }}</span>
+        </div>
+        <div class="info-item full-width" *ngIf="request.purpose">
+          <span class="label">Purpose</span>
+          <span class="value">{{ request.purpose }}</span>
+        </div>
+        <div class="info-item" *ngIf="request.contactPhone">
+          <span class="label">Contact Phone</span>
+          <span class="value">{{ request.contactPhone }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Request Timeline -->
+    <div class="section">
+      <h3><mat-icon>schedule</mat-icon> Timeline</h3>
+      <div class="info-grid">
+        <div class="info-item">
+          <span class="label">Request Date</span>
+          <span class="value">{{ request.requestDate | date:'medium' }}</span>
+        </div>
+        <div class="info-item" *ngIf="request.approvedDate">
+          <span class="label">Processed Date</span>
+          <span class="value">{{ request.approvedDate | date:'medium' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Admin Message (if processed) -->
+    <div class="section" *ngIf="request.adminMessage">
+      <h3><mat-icon>message</mat-icon> Admin Message</h3>
+      <div class="admin-message">
+        {{ request.adminMessage }}
+      </div>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions class="dialog-actions" *ngIf="isPending">
+    <button mat-button (click)="close()" [disabled]="processing">Cancel</button>
+    <button mat-raised-button color="warn" (click)="openRejectDialog()" [disabled]="processing">
+      <mat-icon>cancel</mat-icon> Reject
+    </button>
+    <button mat-raised-button color="primary" (click)="openApproveDialog()" [disabled]="processing">
+      <mat-spinner *ngIf="processing" diameter="18" class="btn-spinner"></mat-spinner>
+      <mat-icon *ngIf="!processing">check_circle</mat-icon>
+      <span>Approve</span>
+    </button>
+  </mat-dialog-actions>
+
+  <mat-dialog-actions class="dialog-actions" *ngIf="!isPending">
+    <button mat-raised-button color="primary" (click)="close()">Close</button>
+  </mat-dialog-actions>
+</div>

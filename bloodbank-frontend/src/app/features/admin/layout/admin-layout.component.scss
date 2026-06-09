@@ -1,0 +1,127 @@
+.sidenav-container { height: 100vh; }
+
+.sidenav {
+  width: 240px;
+  background: linear-gradient(180deg, #2c3e50 0%, #1a252f 100%);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.18);
+}
+
+.sidenav-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 22px 18px;
+  background: linear-gradient(135deg, #d35400, #c0392b);
+
+  .logo-icon {
+    font-size: 36px;
+    width: 36px;
+    height: 36px;
+    color: white;
+  }
+
+  h3 {
+    margin: 0;
+    font-size: 18px;
+    color: white;
+    font-weight: 700;
+  }
+
+  .role-badge {
+    font-size: 11px;
+    background: rgba(255, 255, 255, 0.18);
+    padding: 3px 10px;
+    border-radius: 999px;
+    color: white;
+    letter-spacing: 0.02em;
+  }
+}
+
+
+#t1{
+  color: white;
+}
+#t2{
+  color: red;
+}
+mat-nav-list {
+  flex: 1;
+  padding-top: 10px;
+
+  a {
+    color: white;
+    margin: 4px 10px;
+    border-radius: 10px;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  }
+
+  a:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: white;
+    transform: translateX(1px);
+  }
+
+  a.active-link {
+    background: rgba(243, 156, 18, 0.18);
+    color: white;
+  }
+
+  a.active-link mat-icon {
+    color: #f1c40f;
+  }
+
+  mat-icon {
+    color: inherit;
+  }
+}
+
+.sidenav-footer {
+  padding: 10px 0;
+
+  .logout-link {
+    color: rgba(255, 255, 255, 0.78);
+    margin: 8px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  .logout-link:hover {
+    background: rgba(243, 156, 18, 0.16);
+    color: white;
+  }
+}
+
+.sidenav-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.toolbar {
+  background: white !important;
+  color: #333 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
+  .toolbar-spacer {
+    flex: 1;
+  }
+
+  .user-info {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+  }
+}
+
+.main-content {
+  flex: 1;
+  overflow-y: auto;
+  background: #f5f5f5;
+}

@@ -1,0 +1,45 @@
+<div class="dialog-container">
+  <div class="dialog-header">
+    <mat-icon class="header-icon">cancel</mat-icon>
+    <h2>Reject Request #{{ request.id }}</h2>
+  </div>
+
+  <mat-dialog-content class="dialog-body">
+    <div class="request-summary">
+      <p>
+        You are about to reject the blood request for 
+        <strong>{{ request.patientName }}</strong>.
+      </p>
+      <div class="request-details">
+        <span class="blood-badge">{{ request.bloodGroup }}</span>
+        <span class="units">× {{ request.units }} units</span>
+        <span class="hospital">at {{ request.hospital }}</span>
+      </div>
+    </div>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Reason for rejection (optional)</mat-label>
+      <textarea 
+        matInput 
+        [(ngModel)]="reason" 
+        rows="3" 
+        placeholder="e.g., Blood stock unavailable, Request incomplete, etc."
+      ></textarea>
+      <mat-hint>This message will be sent to the user via email</mat-hint>
+    </mat-form-field>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="close()" [disabled]="processing">Cancel</button>
+    <button 
+      mat-raised-button 
+      color="warn" 
+      (click)="reject()" 
+      [disabled]="processing"
+    >
+      <mat-icon *ngIf="!processing">cancel</mat-icon>
+      <mat-spinner *ngIf="processing" diameter="20"></mat-spinner>
+      Reject Request
+    </button>
+  </mat-dialog-actions>
+</div>

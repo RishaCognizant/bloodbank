@@ -1,0 +1,93 @@
+.auth-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.35)), url('/assets/img/bg1.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  padding: 20px;
+}
+ 
+.auth-card {
+  width: 100%;
+  max-width: 520px;
+  border-radius: 16px !important;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3) !important;
+}
+ 
+.auth-header {
+  background: linear-gradient(135deg, #c0392b, #e74c3c);
+  padding: 28px;
+  text-align: center;
+  color: white;
+  .blood-icon { font-size: 48px; width: 48px; height: 48px; }
+  h1 { font-size: 24px; font-weight: 700; margin: 8px 0 4px; }
+  p { font-size: 14px; opacity: 0.9; }
+}
+ 
+mat-card-content {
+  padding: 28px !important;
+  h2 { font-size: 20px; margin-bottom: 4px; }
+  .subtitle { color: #757575; margin-bottom: 20px; }
+}
+ 
+.row {
+  display: flex;
+  gap: 12px;
+  .half-width { flex: 1; }
+}
+ 
+.submit-btn {
+  height: 48px;
+  font-size: 16px;
+  border-radius: 8px;
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+ 
+.auth-footer {
+  text-align: center;
+  margin-top: 20px;
+  a { color: #c0392b; text-decoration: none; font-weight: 600; }
+}
+.otp-container {
+  // Removes the default bottom padding of the mat-form-field
+  // to let the resend text sit closer to the box
+  ::ng-deep .mat-mdc-form-field-subscript-wrapper {
+    display: none;
+  }
+}
+ 
+.resend-section {
+  padding: 0 4px;
+  margin-top: 4px;   // Pulls it up into the white space under the Verification box
+  margin-bottom: 15px; // Pushes the Password field down so the labels don't touch
+  text-align: left;
+ 
+  small {
+    color: #666;
+    font-size: 12px;
+  }
+ 
+  .resend-link {
+    color: #3f51b5;
+    text-decoration: none;
+    font-weight: 600;
+    cursor: pointer;
+ 
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+ 
+.verify-btn {
+  height: 32px;
+  margin-right: 2px;
+  font-weight: bold;
+}

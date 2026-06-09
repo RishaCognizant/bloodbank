@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<!--
+  testng.xml — This file tells TestNG WHICH tests to run and in WHAT ORDER.
+  Think of it as the "playlist" for your tests.
+-->
+<suite name="Blood Bank Test Suite" verbose="1">
+
+    <!-- Group 1: Login tests run first -->
+    <test name="Login Tests">
+        <classes>
+            <class name="com.bloodbank.selenium.tests.LoginTest"/>
+        </classes>
+    </test>
+
+    <!-- Group 2: Register tests -->
+    <test name="Register Tests">
+        <classes>
+            <class name="com.bloodbank.selenium.tests.RegisterTest"/>
+        </classes>
+    </test>
+
+    <!-- Group 3: User dashboard tests (requires login) -->
+    <test name="User Dashboard Tests">
+        <classes>
+            <class name="com.bloodbank.selenium.tests.UserDashboardTest"/>
+        </classes>
+    </test>
+
+</suite>

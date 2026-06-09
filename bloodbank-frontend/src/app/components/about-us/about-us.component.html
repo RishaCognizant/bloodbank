@@ -1,0 +1,101 @@
+<app-navbar></app-navbar>
+<div class="about-wrapper">
+  <div class="about-hero">
+    <h1>About Blood Bank</h1>
+    <p>Saving lives through safe and efficient blood donation management</p>
+  </div>
+ 
+    <section class="about-section team">
+      <h2>Our Team</h2>
+      <div class="team-cards-grid">
+        <div class="team-card" *ngFor="let member of teamMembers">
+          <div class="card-header">
+            <div class="card-avatar">
+              <mat-icon>person</mat-icon>
+            </div>
+          </div>
+          <div class="card-body">
+            <h3 class="member-name">{{ member.name }}</h3>
+            <p class="member-role">Cohort ID :{{ member.cohortId }}</p>
+            <div class="member-details">
+              <div class="detail-item">
+                <span class="label">ID:</span>
+                <span class="value">{{ member.id }}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Team:</span>
+                <span class="value">{{ member.teamId }}</span>
+              </div>
+            </div>
+          </div>
+      
+        </div>
+      </div>
+    </section>
+  <div class="about-content">
+    <section class="about-section mission">
+      <div class="section-icon">
+        <mat-icon>favorite</mat-icon>
+      </div>
+      <h2>Our Mission</h2>
+      <p>
+        We are committed to providing a reliable and accessible blood donation platform that 
+        connects donors with patients in need. Our mission is to save lives by ensuring safe, 
+        efficient, and timely blood supply management.
+      </p>
+    </section>
+
+    <section class="about-section vision">
+      <div class="section-icon">
+        <mat-icon>lightbulb</mat-icon>
+      </div>
+      <h2>Our Vision</h2>
+      <p>
+        To create a world where every patient has access to safe blood products when needed, 
+        and every donor can contribute to saving lives with confidence and ease.
+      </p>
+    </section>
+
+    <section class="about-section values">
+      <div class="section-icon">
+        <mat-icon>verified</mat-icon>
+      </div>
+      <h2>Our Values</h2>
+      <ul>
+        <li><strong>Safety:</strong> Ensuring highest standards of blood safety and quality</li>
+        <li><strong>Accessibility:</strong> Making donation services available to all</li>
+        <li><strong>Integrity:</strong> Operating with transparency and honesty</li>
+        <li><strong>Compassion:</strong> Caring for both donors and recipients</li>
+        <li><strong>Innovation:</strong> Using technology to improve services</li>
+      </ul>
+    </section>
+
+    <section class="about-section features">
+      <h2>Why Choose Our Platform?</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <mat-icon>security</mat-icon>
+          <h3>Secure & Verified</h3>
+          <p>All donors and blood units are thoroughly screened and verified</p>
+        </div>
+        <div class="feature-card">
+          <mat-icon>schedule</mat-icon>
+          <h3>Easy Scheduling</h3>
+          <p>Book donation appointments at your convenience</p>
+        </div>
+        <div class="feature-card">
+          <mat-icon>notifications_active</mat-icon>
+          <h3>Real-time Updates</h3>
+          <p>Get instant notifications about blood requests and availability</p>
+        </div>
+        <div class="feature-card">
+          <mat-icon>track_changes</mat-icon>
+          <h3>Track Donations</h3>
+          <p>Monitor your donation history and impact</p>
+        </div>
+      </div>
+    </section>
+
+  
+  </div>
+</div>

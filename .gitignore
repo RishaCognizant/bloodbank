@@ -1,0 +1,29 @@
+# Maven / Spring Boot
+target/
+*.class
+*.jar
+*.war
+*.ear
+*.log
+*.tmp
+
+# IDE
+.idea/
+*.iml
+.vscode/
+*.suo
+*.user
+
+# Angular / Node
+bloodbank-frontend/node_modules/
+bloodbank-frontend/dist/
+bloodbank-frontend/.angular/
+
+# Environment / secrets
+*.env
+application-local.properties
+application-local.yml
+
+# OS
+.DS_Store
+Thumbs.db

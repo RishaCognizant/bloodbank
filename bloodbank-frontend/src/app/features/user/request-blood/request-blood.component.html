@@ -1,0 +1,116 @@
+<div class="page-container">
+  <div class="page-header">
+    <h1><mat-icon>bloodtype</mat-icon> Request Blood</h1>
+  </div>
+
+  <!-- Success State -->
+  <mat-card class="success-card" *ngIf="submitted">
+    <mat-card-content>
+      <div class="success-content">
+        <mat-icon class="success-icon">check_circle</mat-icon>
+        <h2>Request Submitted Successfully!</h2>
+        <p>Your blood request has been submitted and is under review. You will receive an email confirmation shortly.</p>
+        <div class="success-actions">
+          <button mat-raised-button color="primary" routerLink="/user/my-requests">View My Requests</button>
+          <button mat-stroked-button (click)="newRequest()">New Request</button>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Request Form -->
+  <mat-card *ngIf="!submitted">
+    <mat-card-header>
+      <mat-card-title>Blood Request Form</mat-card-title>
+      <mat-card-subtitle>Fill in patient and blood requirement details</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <h3 class="section-title"><mat-icon>person</mat-icon> Patient Information</h3>
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="flex-2">
+            <mat-label>Patient Name</mat-label>
+            <input matInput formControlName="patientName" placeholder="Full name of patient">
+            <mat-icon matPrefix>person</mat-icon>
+            <mat-error>Patient name is required</mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="flex-1">
+            <mat-label>Contact Phone</mat-label>
+            <input matInput formControlName="contactPhone" placeholder="+91 XXXXXXXXXX">
+            <mat-icon matPrefix>phone</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <h3 class="section-title"><mat-icon>bloodtype</mat-icon> Blood Requirement</h3>
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="flex-1">
+            <mat-label>Blood Group Required</mat-label>
+            <mat-select formControlName="bloodGroup">
+              <mat-option *ngFor="let bg of bloodGroups" [value]="bg">
+                <span class="bg-option">{{ bg }}</span>
+              </mat-option>
+            </mat-select>
+            <mat-icon matPrefix>bloodtype</mat-icon>
+            <mat-error>Blood group is required</mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="flex-1">
+            <mat-label>Units Required</mat-label>
+            <input matInput type="number" formControlName="units" min="1" max="20">
+            <mat-hint>1 unit = ~450 ml</mat-hint>
+            <mat-error *ngIf="form.get('units')?.hasError('min')">Minimum 1 unit</mat-error>
+            <mat-error *ngIf="form.get('units')?.hasError('max')">Maximum 20 units</mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="flex-1">
+            <mat-label>Purpose</mat-label>
+            <mat-select formControlName="purpose">
+              <mat-option *ngFor="let p of purposes" [value]="p">{{ p }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <h3 class="section-title"><mat-icon>local_hospital</mat-icon> Hospital Details</h3>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Hospital / Medical Centre</mat-label>
+          <input matInput formControlName="hospital" placeholder="Name of hospital or clinic">
+          <mat-icon matPrefix>local_hospital</mat-icon>
+          <mat-error>Hospital name is required</mat-error>
+        </mat-form-field>
+
+        <h3 class="section-title"><mat-icon>priority_high</mat-icon> Priority</h3>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Severity</mat-label>
+          <mat-select formControlName="severity">
+            <mat-option *ngFor="let s of severities" [value]="s.value">{{ s.label }}</mat-option>
+          </mat-select>
+          <mat-icon matPrefix>warning</mat-icon>
+          <mat-hint *ngIf="form.get('severity')?.value === 'URGENT'">URGENT requests must be actioned within 24 hours.</mat-hint>
+          <mat-error>Severity is required</mat-error>
+        </mat-form-field>
+
+        <div class="form-actions">
+          <button mat-button type="button" routerLink="/user/dashboard">Cancel</button>
+          <button mat-raised-button color="primary" type="submit" [disabled]="loading">
+            <mat-spinner diameter="20" *ngIf="loading"></mat-spinner>
+            <mat-icon *ngIf="!loading">send</mat-icon>
+            {{ loading ? 'Submitting...' : 'Submit Request' }}
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Info Panel -->
+  <mat-card class="info-card" *ngIf="!submitted">
+    <mat-card-content>
+      <h3>📋 How it works</h3>
+      <ol>
+        <li>Submit your blood request with patient details</li>
+        <li>Our admin reviews and approves/rejects within 24 hours</li>
+        <li>You receive an email notification with the decision</li>
+        <li>Visit the blood bank with your request ID to collect blood</li>
+      </ol>
+      <mat-divider></mat-divider>
+      <p><mat-icon class="inline-icon">emergency</mat-icon> <strong>Emergency?</strong> Call us directly at <strong>+91 9999999999</strong></p>
+    </mat-card-content>
+  </mat-card>
+</div>

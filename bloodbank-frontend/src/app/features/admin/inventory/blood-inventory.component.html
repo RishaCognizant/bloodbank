@@ -1,0 +1,59 @@
+<div class="page-container">
+  <div class="page-header">
+    <h1><mat-icon>inventory_2</mat-icon> Blood Inventory</h1>
+  </div>
+
+  <div class="inventory-layout">
+    <!-- Inventory Grid -->
+    <div class="inventory-cards" *ngIf="!loading; else loadingTpl">
+      <mat-card *ngFor="let item of inventory" class="blood-card"
+                [class.low-stock]="item.units <= 10" [class.empty-stock]="item.units === 0">
+        <mat-card-content>
+          <div class="blood-group">{{ item.bloodGroup }}</div>
+          <div class="units">{{ item.units }}</div>
+          <div class="units-label">Units Available</div>
+          <div class="stock-level" [class]="'level-' + getStockLevel(item.units).toLowerCase()">
+            {{ getStockLevel(item.units) }}
+          </div>
+          <button mat-stroked-button color="primary" class="edit-btn" (click)="editInventory(item)">
+            <mat-icon>edit</mat-icon> Update
+          </button>
+          <div class="last-updated">Updated: {{ item.lastUpdated | date:'short' }}</div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Update Form -->
+    <mat-card class="update-form" *ngIf="selectedInventory">
+      <mat-card-header>
+        <mat-card-title>Update Inventory</mat-card-title>
+        <mat-card-subtitle>{{ selectedInventory.bloodGroup }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <form [formGroup]="form" (ngSubmit)="updateInventory()">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Blood Group</mat-label>
+            <mat-select formControlName="bloodGroup">
+              <mat-option *ngFor="let bg of bloodGroups" [value]="bg">{{ bg }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Units Available</mat-label>
+            <input matInput type="number" formControlName="units" min="0">
+            <mat-error>Enter valid units (≥ 0)</mat-error>
+          </mat-form-field>
+
+          <div class="form-actions">
+            <button mat-button type="button" (click)="selectedInventory = null">Cancel</button>
+            <button mat-raised-button color="primary" type="submit">Update</button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+
+<ng-template #loadingTpl>
+  <div class="loading-center"><mat-spinner diameter="40"></mat-spinner></div>
+</ng-template>

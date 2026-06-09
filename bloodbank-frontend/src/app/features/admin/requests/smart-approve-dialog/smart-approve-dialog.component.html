@@ -1,0 +1,118 @@
+<div class="dialog-container">
+  <div class="dialog-header" [class.has-stock]="hasSufficientStock" [class.no-stock]="!hasSufficientStock">
+    <mat-icon class="header-icon">{{ hasSufficientStock ? 'check_circle' : 'warning' }}</mat-icon>
+    <h2>{{ hasSufficientStock ? 'Approve Request' : 'Insufficient Stock' }} #{{ request.id }}</h2>
+  </div>
+
+  <mat-dialog-content class="dialog-body">
+    <p class="summary">
+      <span *ngIf="hasSufficientStock">Select blood group for <strong>{{ request.patientName }}</strong></span>
+      <span *ngIf="!hasSufficientStock">No sufficient stock available for <strong>{{ request.patientName }}</strong></span>
+      <span class="required-info">
+        Required: <span class="blood-badge primary">{{ requiredBloodGroup }}</span> × <strong>{{ request.units }}</strong> units
+      </span>
+    </p>
+
+    <!-- Compatible Blood Groups with Stock -->
+    <div class="stock-grid">
+      <div 
+        *ngFor="let stock of stocks" 
+        class="stock-card"
+        [class.selected]="selectedBloodGroup === stock.bloodGroup"
+        [class.insufficient]="!isStockSufficient(stock)"
+        [class.is-required]="stock.bloodGroup === requiredBloodGroup"
+        (click)="selectBloodGroup(stock.bloodGroup)"
+      >
+        <div class="stock-header">
+          <span class="blood-badge" [class.compatible]="stock.bloodGroup !== requiredBloodGroup">
+            {{ stock.bloodGroup }}
+          </span>
+          <span class="compatibility-tag" *ngIf="stock.bloodGroup !== requiredBloodGroup">Compatible</span>
+          <span class="exact-tag" *ngIf="stock.bloodGroup === requiredBloodGroup">Exact Match</span>
+        </div>
+        <div class="stock-units">
+          <span class="units-value" [class.low]="stock.units < 5">{{ stock.units }}</span>
+          <span class="units-label">units available</span>
+        </div>
+        <div class="stock-status">
+          <mat-icon *ngIf="isStockSufficient(stock)" class="sufficient">check_circle</mat-icon>
+          <mat-icon *ngIf="!isStockSufficient(stock)" class="insufficient-icon">cancel</mat-icon>
+          <span *ngIf="isStockSufficient(stock)">Sufficient</span>
+          <span *ngIf="!isStockSufficient(stock)" class="insufficient-text">Insufficient</span>
+        </div>
+        <div class="selected-check" *ngIf="selectedBloodGroup === stock.bloodGroup">
+          <mat-icon>done</mat-icon>
+        </div>
+      </div>
+    </div>
+
+    <!-- No Stock Warning -->
+    <div class="no-stock-notice" *ngIf="!hasSufficientStock">
+      <mat-icon>info</mat-icon>
+      <div>
+        <strong>No compatible blood group has sufficient stock</strong>
+        <p>
+          You can send emails to compatible donors requesting blood donation. 
+          The request will remain <strong>PENDING</strong> until stock is available.
+        </p>
+      </div>
+    </div>
+
+    <!-- Different Blood Group Notice -->
+    <div class="different-blood-notice" *ngIf="isDifferentBloodGroup && hasSufficientStock">
+      <mat-icon>info</mat-icon>
+      <div>
+        <strong>Different blood group selected</strong>
+        <p>
+          Using <span class="blood-badge sm">{{ selectedBloodGroup }}</span> instead of 
+          <span class="blood-badge sm primary">{{ requiredBloodGroup }}</span>.
+          User will be notified via email.
+        </p>
+      </div>
+    </div>
+
+    <!-- Reason Field (only when approving) -->
+    <mat-form-field appearance="outline" class="full-width" *ngIf="selectedBloodGroup && hasSufficientStock">
+      <mat-label>{{ isDifferentBloodGroup ? 'Reason (optional)' : 'Message (optional)' }}</mat-label>
+      <textarea matInput [(ngModel)]="reason" rows="2" 
+                [placeholder]="isDifferentBloodGroup ? 'Reason for using different blood type' : 'Optional message'"></textarea>
+    </mat-form-field>
+  </mat-dialog-content>
+
+  <mat-dialog-actions class="dialog-actions">
+    <button mat-button (click)="close()" [disabled]="processing">
+      Cancel
+    </button>
+    
+    <!-- Reject button (always available when not processing) -->
+    <button mat-raised-button color="warn" (click)="reject()" [disabled]="processing">
+      <mat-icon>cancel</mat-icon> Reject
+    </button>
+
+    <!-- Send Emails button (when no sufficient stock) -->
+    <button 
+      mat-raised-button 
+      color="accent" 
+      (click)="sendEmails()" 
+      [disabled]="processing"
+      *ngIf="!hasSufficientStock"
+    >
+      <mat-spinner *ngIf="processing" diameter="18"></mat-spinner>
+      <mat-icon *ngIf="!processing">email</mat-icon>
+      <span>Send Emails to Donors</span>
+    </button>
+
+    <!-- Approve button (when sufficient stock and blood group selected) -->
+    <button 
+      mat-raised-button 
+      color="primary" 
+      (click)="approve()" 
+      [disabled]="!selectedBloodGroup || processing"
+      *ngIf="hasSufficientStock"
+    >
+      <mat-spinner *ngIf="processing" diameter="18"></mat-spinner>
+      <mat-icon *ngIf="!processing">check_circle</mat-icon>
+      <span>Approve with {{ selectedBloodGroup || '...' }}</span>
+    </button>
+  </mat-dialog-actions>
+</div>

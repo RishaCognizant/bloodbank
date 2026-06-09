@@ -1,0 +1,92 @@
+.dialog-container {
+  min-width: 400px;
+  max-width: 480px;
+}
+
+.dialog-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 24px 16px;
+  border-radius: 4px 4px 0 0;
+  margin: -24px -24px 0;
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+
+  h2 {
+    margin: 0;
+    font-size: 1.3rem;
+    color: white;
+  }
+
+  .header-icon {
+    font-size: 2rem;
+    width: 2rem;
+    height: 2rem;
+    color: white;
+  }
+}
+
+.dialog-body {
+  padding: 20px 0 8px !important;
+}
+
+.request-summary {
+  background: #fafafa;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 20px;
+
+  p {
+    margin: 0 0 12px;
+    color: #444;
+    line-height: 1.5;
+  }
+
+  .request-details {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .units {
+    font-weight: 600;
+    color: #333;
+  }
+
+  .hospital {
+    color: #666;
+    font-size: 0.9rem;
+  }
+}
+
+.blood-badge {
+  display: inline-block;
+  background: #c62828;
+  color: white;
+  padding: 3px 12px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.full-width {
+  width: 100%;
+}
+
+mat-dialog-actions {
+  padding: 16px 0 0 !important;
+  gap: 8px;
+
+  button {
+    mat-icon {
+      margin-right: 4px;
+    }
+
+    mat-spinner {
+      display: inline-block;
+      margin-right: 8px;
+    }
+  }
+}

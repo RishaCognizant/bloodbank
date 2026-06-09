@@ -1,0 +1,27 @@
+<header class="navbar-shell">
+  <div class="navbar-inner">
+    <a class="navbar-brand" routerLink="/home">
+      <mat-icon class="brand-icon">bloodtype</mat-icon>
+      <span>Blood Bank</span>
+    </a>
+    
+    <nav class="navbar-links">
+      <a class="nav-link" routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
+      <a class="nav-link" routerLink="/about">About Us</a>
+      <!-- <a class="nav-link" routerLink="/contact">Contact Us</a> -->
+   
+    </nav>
+    
+    <div class="navbar-actions">
+      <ng-container *ngIf="isLoggedIn; else loggedOut">
+        <a class="nav-link" routerLink="/user">Dashboard</a>
+        <a class="btn-login" (click)="logout()">Logout</a>
+      </ng-container>
+      <ng-template #loggedOut>
+        <a class="nav-link" routerLink="/register">Register</a>
+        <a class="btn-login" routerLink="/login">Login</a>
+      </ng-template>
+    </div>
+  </div>
+</header>
+

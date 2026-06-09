@@ -1,0 +1,605 @@
+{
+  "info": {
+    "name": "Blood Bank Management System",
+    "_postman_id": "bb000001-0000-4000-a000-000000000001",
+    "description": "Complete REST API collection for Blood Bank Management System.\n\nBase URL stored in `baseUrl` variable (default: http://localhost:7777).\n\nHow to authenticate:\n1. Run 'Login' under Authentication — the JWT token is captured automatically into the `token` variable.\n2. All other folders inherit Bearer auth from the collection.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      { "key": "token", "value": "{{token}}", "type": "string" }
+    ]
+  },
+  "variable": [
+    { "key": "baseUrl",    "value": "http://localhost:7777", "type": "string", "description": "Backend base URL" },
+    { "key": "token",      "value": "",                      "type": "string", "description": "JWT — auto-set by Login" },
+    { "key": "userId",     "value": "1",                     "type": "string", "description": "Target user ID (admin endpoints)" },
+    { "key": "donationId", "value": "1",                     "type": "string", "description": "Donation record ID" },
+    { "key": "requestId",  "value": "1",                     "type": "string", "description": "Blood request ID" }
+  ],
+  "item": [
+
+    {
+      "name": "Authentication",
+      "description": "Public endpoints — no JWT required.",
+      "auth": { "type": "noauth" },
+      "item": [
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const json = pm.response.json();",
+                  "    if (json.token) {",
+                  "        pm.collectionVariables.set('token', json.token);",
+                  "        console.log('Token saved:', json.token);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@bloodbank.com\",\n  \"password\": \"admin123\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            },
+            "description": "Authenticate with email and password. JWT token is automatically saved to the `token` collection variable."
+          }
+        },
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\",\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"password123\",\n  \"phone\": \"9876543210\",\n  \"bloodGroup\": \"O_POSITIVE\",\n  \"address\": \"123 Main Street\",\n  \"city\": \"Chennai\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "register"]
+            },
+            "description": "Create a new USER account. Blood group values: A_POSITIVE, A_NEGATIVE, B_POSITIVE, B_NEGATIVE, AB_POSITIVE, AB_NEGATIVE, O_POSITIVE, O_NEGATIVE"
+          }
+        },
+        {
+          "name": "Send OTP",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/send-otp?email=john.doe@example.com",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "send-otp"],
+              "query": [
+                { "key": "email", "value": "john.doe@example.com", "description": "Email address to send OTP to" }
+              ]
+            },
+            "description": "Send a one-time password to the given email for verification."
+          }
+        },
+        {
+          "name": "Verify OTP",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/verify-otp?email=john.doe@example.com&otp=123456",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "verify-otp"],
+              "query": [
+                { "key": "email", "value": "john.doe@example.com" },
+                { "key": "otp",   "value": "123456", "description": "6-digit OTP received in email" }
+              ]
+            },
+            "description": "Verify the OTP sent to the user's email. Returns 200 on success."
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Admin",
+      "description": "Requires ROLE_ADMIN. Ensure you are logged in as an admin user.",
+      "item": [
+        {
+          "name": "Get Dashboard Stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/dashboard",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "dashboard"]
+            },
+            "description": "Returns aggregate counts: total users, donations, requests, and inventory summary."
+          }
+        },
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "users"]
+            },
+            "description": "Returns a list of all registered users."
+          }
+        },
+        {
+          "name": "Get User by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/users/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "users", ":id"],
+              "variable": [
+                { "key": "id", "value": "{{userId}}", "description": "User ID" }
+              ]
+            },
+            "description": "Get a single user by their ID."
+          }
+        },
+        {
+          "name": "Toggle User Status",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/users/:id/toggle-status",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "users", ":id", "toggle-status"],
+              "variable": [
+                { "key": "id", "value": "{{userId}}", "description": "User ID" }
+              ]
+            },
+            "description": "Toggle a user's active/inactive status."
+          }
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/users/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "users", ":id"],
+              "variable": [
+                { "key": "id", "value": "{{userId}}", "description": "User ID" }
+              ]
+            },
+            "description": "Permanently delete a user by ID."
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "User Profile",
+      "description": "View and update the authenticated user's own profile.",
+      "item": [
+        {
+          "name": "Get My Profile",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/user/profile",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "user", "profile"]
+            },
+            "description": "Returns the full profile of the currently authenticated user."
+          }
+        },
+        {
+          "name": "Update My Profile",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\",\n  \"phone\": \"9876543210\",\n  \"bloodGroup\": \"O_POSITIVE\",\n  \"address\": \"456 New Street\",\n  \"city\": \"Mumbai\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/user/profile",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "user", "profile"]
+            },
+            "description": "Update name, phone, address, city, or blood group for the authenticated user."
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Blood Inventory",
+      "description": "View and update blood stock levels. All endpoints require authentication.",
+      "item": [
+        {
+          "name": "Get All Inventory",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/inventory",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "inventory"]
+            },
+            "description": "Returns stock levels for all 8 blood groups."
+          }
+        },
+        {
+          "name": "Get Inventory by Blood Group",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/inventory/:bloodGroup",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "inventory", ":bloodGroup"],
+              "variable": [
+                {
+                  "key": "bloodGroup",
+                  "value": "O_POSITIVE",
+                  "description": "One of: A_POSITIVE, A_NEGATIVE, B_POSITIVE, B_NEGATIVE, AB_POSITIVE, AB_NEGATIVE, O_POSITIVE, O_NEGATIVE"
+                }
+              ]
+            },
+            "description": "Get stock details for a single blood group."
+          }
+        },
+        {
+          "name": "Update Inventory",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bloodGroup\": \"O_POSITIVE\",\n  \"units\": 25\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/inventory/update",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "inventory", "update"]
+            },
+            "description": "Set available units for a given blood group. Admin only."
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Donations",
+      "description": "Schedule, manage, and track blood donations.",
+      "item": [
+        {
+          "name": "Schedule Donation (User)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bloodGroup\": \"O_POSITIVE\",\n  \"units\": 1,\n  \"donationDate\": \"2026-06-15\",\n  \"location\": \"City Blood Bank, Chennai\",\n  \"notes\": \"First time donation\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/donations/schedule",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "donations", "schedule"]
+            },
+            "description": "Authenticated user schedules a future blood donation. Date format: YYYY-MM-DD."
+          }
+        },
+        {
+          "name": "Admin: Record Donation",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bloodGroup\": \"B_POSITIVE\",\n  \"units\": 1,\n  \"donationDate\": \"2026-05-28\",\n  \"location\": \"Apollo Hospital Blood Bank\",\n  \"notes\": \"Walk-in donor\",\n  \"userId\": 2\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/donations/admin/add",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "donations", "admin", "add"]
+            },
+            "description": "Admin manually records a completed donation for any user. Requires ROLE_ADMIN."
+          }
+        },
+        {
+          "name": "Admin: Get All Donations",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/donations",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "donations"]
+            },
+            "description": "Returns all donation records across all users. Requires ROLE_ADMIN."
+          }
+        },
+        {
+          "name": "Get My Donations",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/donations/my",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "donations", "my"]
+            },
+            "description": "Returns all donations for the currently authenticated user."
+          }
+        },
+        {
+          "name": "Admin: Complete Donation",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/donations/:id/complete",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "donations", ":id", "complete"],
+              "variable": [
+                { "key": "id", "value": "{{donationId}}", "description": "Donation record ID" }
+              ]
+            },
+            "description": "Mark a scheduled donation as COMPLETED and update blood inventory. Requires ROLE_ADMIN."
+          }
+        },
+        {
+          "name": "Cancel Donation",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/donations/:id/cancel",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "donations", ":id", "cancel"],
+              "variable": [
+                { "key": "id", "value": "{{donationId}}", "description": "Donation record ID" }
+              ]
+            },
+            "description": "Cancel a scheduled donation by ID."
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Blood Requests",
+      "description": "Create, view, approve, and manage blood requests.",
+      "item": [
+        {
+          "name": "Create Blood Request",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"patientName\": \"Jane Smith\",\n  \"bloodGroup\": \"AB_POSITIVE\",\n  \"units\": 2,\n  \"purpose\": \"Surgery\",\n  \"hospital\": \"Apollo Hospital, Chennai\",\n  \"contactPhone\": \"9876543210\",\n  \"severity\": \"HIGH\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/requests",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "requests"]
+            },
+            "description": "Submit a new blood request. severity values: URGENT, HIGH, MEDIUM, LOW."
+          }
+        },
+        {
+          "name": "Get All Requests",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/requests",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "requests"]
+            },
+            "description": "Returns all blood requests. Remove the severity query param to get all."
+          }
+        },
+        {
+          "name": "Get All Requests (filtered by severity)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/requests?severity=URGENT",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "requests"],
+              "query": [
+                {
+                  "key": "severity",
+                  "value": "URGENT",
+                  "description": "Filter by severity: URGENT, HIGH, MEDIUM, LOW"
+                }
+              ]
+            },
+            "description": "Filter requests by severity level."
+          }
+        },
+        {
+          "name": "Get My Requests",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/requests/my",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "requests", "my"]
+            },
+            "description": "Returns all blood requests submitted by the authenticated user."
+          }
+        },
+        {
+          "name": "Get Request by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/requests/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "requests", ":id"],
+              "variable": [
+                { "key": "id", "value": "{{requestId}}", "description": "Blood request ID" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Smart Approve",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/requests/:id/smart-approve",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "requests", ":id", "smart-approve"],
+              "variable": [
+                { "key": "id", "value": "{{requestId}}", "description": "Blood request ID" }
+              ]
+            },
+            "description": "Auto-selects the best compatible blood group from available stock and approves the request."
+          }
+        },
+        {
+          "name": "Send Donor Emails",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/requests/:id/send-donor-emails",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "requests", ":id", "send-donor-emails"],
+              "variable": [
+                { "key": "id", "value": "{{requestId}}", "description": "Blood request ID" }
+              ]
+            },
+            "description": "Emails compatible donors asking them to donate for this request."
+          }
+        },
+        {
+          "name": "Get Compatible Stocks",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/requests/compatible-stocks/:bloodGroup",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "requests", "compatible-stocks", ":bloodGroup"],
+              "variable": [
+                {
+                  "key": "bloodGroup",
+                  "value": "AB_POSITIVE",
+                  "description": "One of: A_POSITIVE, A_NEGATIVE, B_POSITIVE, B_NEGATIVE, AB_POSITIVE, AB_NEGATIVE, O_POSITIVE, O_NEGATIVE"
+                }
+              ]
+            },
+            "description": "Returns available units for all blood groups compatible with the given one."
+          }
+        },
+        {
+          "name": "Manual Approve",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bloodGroup\": \"O_POSITIVE\",\n  \"message\": \"Approved from O+ stock — patient is AB+\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/requests/:id/manual-approve",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "requests", ":id", "manual-approve"],
+              "variable": [
+                { "key": "id", "value": "{{requestId}}", "description": "Blood request ID" }
+              ]
+            },
+            "description": "Admin manually selects a specific blood group to allocate for this request."
+          }
+        },
+        {
+          "name": "Process Action (Approve / Reject)",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"action\": \"APPROVED\",\n  \"message\": \"Stock available and allocated\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/requests/:id/action",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "requests", ":id", "action"],
+              "variable": [
+                { "key": "id", "value": "{{requestId}}", "description": "Blood request ID" }
+              ]
+            },
+            "description": "Process a blood request. action values: APPROVED or REJECTED."
+          }
+        },
+        {
+          "name": "Delete Request",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/requests/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "requests", ":id"],
+              "variable": [
+                { "key": "id", "value": "{{requestId}}", "description": "Blood request ID" }
+              ]
+            },
+            "description": "Delete a blood request by ID."
+          }
+        },
+        {
+          "name": "Get My Stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/requests/stats/user",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "requests", "stats", "user"]
+            },
+            "description": "Returns total, approved, pending, and rejected counts for the authenticated user."
+          }
+        }
+      ]
+    }
+
+  ]
+}

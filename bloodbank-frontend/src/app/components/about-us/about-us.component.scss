@@ -1,0 +1,367 @@
+.about-wrapper {
+  min-height: 100vh;
+  background: #f8f9fa;
+}
+
+.about-hero {
+  background: linear-gradient(135deg, #c0392b 0%, #e74c3c 50%, #ff6b6b 100%);
+  color: #fff;
+  padding: 4rem 2rem;
+  text-align: center;
+
+  h1 {
+    font-size: clamp(2.5rem, 6vw, 3.5rem);
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.75rem;
+  }
+
+  p {
+    font-size: 1.2rem;
+    opacity: 0.95;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+}
+
+.about-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+}
+
+.about-section {
+  margin-bottom: 3rem;
+
+  h2 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 1rem;
+    font-weight: 800;
+  }
+
+  p {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: #666;
+    margin-bottom: 1.5rem;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+
+    li {
+      font-size: 1rem;
+      line-height: 1.8;
+      color: #666;
+      margin-bottom: 0.75rem;
+      padding-left: 1.5rem;
+      position: relative;
+
+      &::before {
+        content: '✓';
+        position: absolute;
+        left: 0;
+        color: #c0392b;
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+.section-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #c0392b 0%, #e74c3c 100%);
+  margin-bottom: 1.5rem;
+
+  mat-icon {
+    color: #fff;
+    font-size: 40px;
+    width: 40px;
+    height: 40px;
+  }
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.feature-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(192, 57, 43, 0.15);
+  }
+
+  mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    color: #c0392b;
+    margin-bottom: 1rem;
+  }
+
+  h3 {
+    font-size: 1.2rem;
+    color: #333;
+    margin-bottom: 0.75rem;
+    font-weight: 700;
+  }
+
+  p {
+    font-size: 0.95rem;
+    color: #777;
+    margin: 0;
+  }
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.stat-box {
+  background: linear-gradient(135deg, #c0392b 0%, #e74c3c 100%);
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  color: #fff;
+
+  h3 {
+    font-size: 2.5rem;
+    font-weight: 900;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    font-size: 1rem;
+    opacity: 0.95;
+    margin: 0;
+  }
+}
+
+// Team Cards Styles
+.team-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2.5rem;
+  margin-top: 2rem;
+}
+
+.team-card {
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  &:hover {
+    transform: translateY(-12px);
+    box-shadow: 0 16px 40px rgba(192, 57, 43, 0.2);
+    
+    .card-header {
+      background: linear-gradient(135deg, #c0392b 0%, #e74c3c 100%);
+      
+      .card-avatar mat-icon {
+        color: #fff;
+      }
+    }
+  }
+
+  .card-header {
+    background: linear-gradient(135deg, #f0f0f0 0%, #e8e8e8 100%);
+    padding: 2rem 1rem;
+    text-align: center;
+    transition: all 0.3s ease;
+  }
+
+  .card-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #c0392b 0%, #e74c3c 100%);
+    margin: 0 auto;
+
+    mat-icon {
+      font-size: 60px;
+      width: 60px;
+      height: 60px;
+      color: #fff;
+      transition: all 0.3s ease;
+    }
+  }
+
+  .card-body {
+    padding: 1.5rem;
+    flex: 1;
+  }
+
+  .member-name {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #333;
+    margin: 0 0 0.5rem 0;
+    text-align: center;
+  }
+
+  .member-role {
+    font-size: 0.95rem;
+    color: #c0392b;
+    text-align: center;
+    margin: 0 0 1.5rem 0;
+    font-weight: 600;
+  }
+
+  .member-details {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .detail-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #c0392b;
+
+    .label {
+      font-weight: 600;
+      color: #333;
+      font-size: 0.9rem;
+    }
+
+    .value {
+      font-weight: 500;
+      color: #c0392b;
+      font-size: 0.9rem;
+      font-family: 'Courier New', monospace;
+      background: #fff;
+      padding: 0.25rem 0.75rem;
+      border-radius: 4px;
+    }
+  }
+
+  .card-footer {
+    padding: 1.5rem;
+    border-top: 1px solid #e0e0e0;
+    background: #fafafa;
+  }
+
+  .contact-btn {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: linear-gradient(135deg, #c0392b 0%, #e74c3c 100%);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: scale(1.02);
+      box-shadow: 0 6px 12px rgba(192, 57, 43, 0.3);
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .about-hero {
+    padding: 2rem 1rem;
+
+    h1 {
+      font-size: 2rem;
+    }
+
+    p {
+      font-size: 1rem;
+    }
+  }
+
+  .about-content {
+    padding: 2rem 1rem;
+  }
+
+  .about-section {
+    h2 {
+      font-size: 1.5rem;
+    }
+  }
+
+  .section-icon {
+    width: 60px;
+    height: 60px;
+
+    mat-icon {
+      font-size: 30px;
+      width: 30px;
+      height: 30px;
+    }
+  }
+
+  .team-cards-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .team-card {
+    .card-avatar {
+      width: 80px;
+      height: 80px;
+
+      mat-icon {
+        font-size: 48px;
+        width: 48px;
+        height: 48px;
+      }
+    }
+
+    .member-name {
+      font-size: 1.1rem;
+    }
+
+    .member-role {
+      font-size: 0.85rem;
+    }
+
+    .detail-item {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.25rem;
+
+      .value {
+        margin-top: 0.25rem;
+      }
+    }
+  }
+}

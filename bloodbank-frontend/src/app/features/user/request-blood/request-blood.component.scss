@@ -1,0 +1,36 @@
+.success-card {
+  text-align: center;
+  border-radius: 12px !important;
+  border-top: 4px solid #27ae60;
+  margin-bottom: 24px;
+}
+.success-content {
+  padding: 32px;
+  .success-icon { font-size: 72px; width: 72px; height: 72px; color: #27ae60; }
+  h2 { font-size: 22px; margin: 16px 0 8px; }
+  p { color: #616161; margin-bottom: 24px; }
+  .success-actions { display: flex; gap: 12px; justify-content: center; }
+}
+
+mat-card { border-radius: 12px !important; margin-bottom: 24px; }
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #c0392b;
+  margin: 20px 0 12px;
+  mat-icon { font-size: 18px; width: 18px; height: 18px; }
+}
+
+.form-row { display: flex; gap: 12px; .flex-1 { flex: 1; } .flex-2 { flex: 2; } }
+
+.form-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 16px; }
+
+.info-card {
+  background: #fff8e1;
+  ol { margin: 12px 0 16px 20px; li { margin-bottom: 6px; color: #616161; font-size: 14px; } }
+  .inline-icon { vertical-align: middle; font-size: 16px; width: 16px; height: 16px; color: #e74c3c; }
+}
+.bg-option { font-weight: 700; color: #c0392b; }

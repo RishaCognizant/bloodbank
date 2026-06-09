@@ -1,0 +1,54 @@
+<div class="page-container">
+  <div class="page-header">
+    <h1><mat-icon>list_alt</mat-icon> My Blood Requests</h1>
+    <button mat-raised-button color="primary" routerLink="/user/request-blood">
+      <mat-icon>add</mat-icon> New Request
+    </button>
+  </div>
+
+  <mat-button-toggle-group [(ngModel)]="statusFilter" class="filter-group">
+    <mat-button-toggle value="ALL" (click)="filterByStatus('ALL')">All ({{ requests.length }})</mat-button-toggle>
+    <mat-button-toggle value="PENDING" (click)="filterByStatus('PENDING')">Pending ({{ countByStatus('PENDING') }})</mat-button-toggle>
+    <mat-button-toggle value="APPROVED" (click)="filterByStatus('APPROVED')">Approved ({{ countByStatus('APPROVED') }})</mat-button-toggle>
+    <mat-button-toggle value="REJECTED" (click)="filterByStatus('REJECTED')">Rejected ({{ countByStatus('REJECTED') }})</mat-button-toggle>
+  </mat-button-toggle-group>
+
+  <div *ngIf="loading" class="loading-center"><mat-spinner diameter="40"></mat-spinner></div>
+
+  <div *ngIf="!loading && filteredRequests.length === 0" class="empty-state">
+    <mat-icon>hourglass_empty</mat-icon>
+    <p>No requests found</p>
+    <button mat-raised-button color="primary" routerLink="/user/request-blood">Create First Request</button>
+  </div>
+
+  <div class="requests-list" *ngIf="!loading">
+    <mat-card *ngFor="let r of filteredRequests" class="request-card" [class]="'border-' + r.status.toLowerCase()">
+      <mat-card-content>
+        <div class="card-header">
+          <div class="card-left">
+            <span class="blood-group-chip large">{{ r.bloodGroup }}</span>
+            <div>
+              <div class="patient-name">{{ r.patientName }}</div>
+              <div class="hospital"><mat-icon class="small-icon">local_hospital</mat-icon> {{ r.hospital }}</div>
+              <div class="purpose" *ngIf="r.purpose">Purpose: {{ r.purpose }}</div>
+            </div>
+          </div>
+          <div class="card-right">
+            <span *ngIf="r.severity" class="severity-chip" [ngClass]="'sev-' + r.severity.toLowerCase()"
+                  [matTooltip]="r.severity === 'URGENT' ? 'Action required within 24h' : ''">
+              {{ r.severity }}
+            </span>
+            <span class="status-badge" [class]="r.status">{{ r.status }}</span>
+            <div class="units-info">{{ r.units }} unit(s)</div>
+            <div class="date">{{ r.requestDate | date:'mediumDate' }}</div>
+          </div>
+        </div>
+        <mat-divider *ngIf="r.adminMessage"></mat-divider>
+        <div class="admin-message" *ngIf="r.adminMessage">
+          <mat-icon>message</mat-icon>
+          <span><strong>Admin Message:</strong> {{ r.adminMessage }}</span>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

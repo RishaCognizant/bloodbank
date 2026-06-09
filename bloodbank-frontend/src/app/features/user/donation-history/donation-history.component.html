@@ -1,0 +1,100 @@
+<div class="page-container">
+  <div class="page-header">
+    <h1><mat-icon>volunteer_activism</mat-icon> Donation History</h1>
+    <button mat-raised-button color="primary" (click)="showForm = !showForm">
+      <mat-icon>add</mat-icon> Schedule Donation
+    </button>
+  </div>
+
+  <!-- Stats Row -->
+  <div class="donation-stats">
+    <mat-card class="mini-stat">
+      <mat-icon class="icon-green">check_circle</mat-icon>
+      <div class="val">{{ completedCount }}</div>
+      <div class="lbl">Completed</div>
+    </mat-card>
+    <mat-card class="mini-stat">
+      <mat-icon class="icon-blue">event</mat-icon>
+      <div class="val">{{ scheduledCount }}</div>
+      <div class="lbl">Scheduled</div>
+    </mat-card>
+    <mat-card class="mini-stat">
+      <mat-icon class="icon-red">favorite</mat-icon>
+      <div class="val">{{ completedCount * 3 }}</div>
+      <div class="lbl">Lives Saved</div>
+    </mat-card>
+  </div>
+
+  <!-- Schedule Form -->
+  <mat-card class="schedule-form" *ngIf="showForm">
+    <mat-card-header><mat-card-title>Schedule Blood Donation</mat-card-title></mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="scheduleDonation()">
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Blood Group</mat-label>
+            <mat-select formControlName="bloodGroup">
+              <mat-option *ngFor="let bg of bloodGroups" [value]="bg">{{ bg }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Units</mat-label>
+            <input matInput type="number" formControlName="units" min="1">
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Donation Date</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="donationDate">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="flex-2">
+            <mat-label>Location / Blood Bank</mat-label>
+            <input matInput formControlName="location" placeholder="e.g. City Blood Bank, Main Road">
+            <mat-icon matPrefix>location_on</mat-icon>
+          </mat-form-field>
+        </div>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Notes (optional)</mat-label>
+          <textarea matInput formControlName="notes" rows="2"></textarea>
+        </mat-form-field>
+        <div class="form-actions">
+          <button mat-button type="button" (click)="showForm = false">Cancel</button>
+          <button mat-raised-button color="primary" type="submit" [disabled]="submitting">Schedule</button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Donations List -->
+  <div *ngIf="loading" class="loading-center"><mat-spinner diameter="40"></mat-spinner></div>
+
+  <div *ngIf="!loading && donations.length === 0" class="empty-state">
+    <mat-icon>volunteer_activism</mat-icon>
+    <h3>No Donations Yet</h3>
+    <p>Be a hero! Schedule your first blood donation.</p>
+    <button mat-raised-button color="primary" (click)="showForm = true">Schedule Now</button>
+  </div>
+
+  <div class="donations-grid" *ngIf="!loading && donations.length > 0">
+    <mat-card *ngFor="let d of donations" class="donation-card" [class]="'border-' + d.status.toLowerCase()">
+      <mat-card-content>
+        <div class="donation-header">
+          <span class="blood-group-chip">{{ d.bloodGroup }}</span>
+          <span class="status-badge" [class]="d.status">{{ d.status }}</span>
+        </div>
+        <div class="donation-details">
+          <div class="detail"><mat-icon>calendar_today</mat-icon> {{ d.donationDate | date:'mediumDate' }}</div>
+          <div class="detail"><mat-icon>location_on</mat-icon> {{ d.location }}</div>
+          <div class="detail"><mat-icon>water_drop</mat-icon> {{ d.units }} unit(s)</div>
+          <div class="detail notes" *ngIf="d.notes"><mat-icon>note</mat-icon> {{ d.notes }}</div>
+        </div>
+        <div class="card-actions" *ngIf="d.status === 'SCHEDULED'">
+          <button mat-stroked-button color="warn" (click)="cancelDonation(d.id)">Cancel</button>
+        </div>
+        <div class="thank-you" *ngIf="d.status === 'COMPLETED'">
+          🎉 Thank you! Your donation may save up to 3 lives.
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

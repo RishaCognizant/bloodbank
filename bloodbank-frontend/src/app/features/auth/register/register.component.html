@@ -1,0 +1,109 @@
+<div class="auth-wrapper">
+  <mat-card class="auth-card">
+    <div class="auth-header">
+      <mat-icon class="blood-icon">bloodtype</mat-icon>
+      <h1>Blood Bank</h1>
+      <p>Join Our Community</p>
+    </div>
+ 
+    <mat-card-content>
+      <h2>Create Account</h2>
+      <p class="subtitle">Help save lives by joining us</p>
+ 
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <div class="row">
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>First Name</mat-label>
+            <input matInput formControlName="firstName">
+            <mat-error>Required</mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Last Name</mat-label>
+            <input matInput formControlName="lastName">
+            <mat-error>Required</mat-error>
+          </mat-form-field>
+        </div>
+ 
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Email Address</mat-label>
+          <input matInput formControlName="email" type="email">
+          <mat-icon matPrefix>email</mat-icon>
+         
+ 
+          <button type="button" matSuffix mat-button color="primary"
+          *ngIf="!isOtpSent && !isEmailVerified"
+          (click)="sendOtp()"
+          [disabled]="form.get('email')?.invalid">
+          Send OTP
+          </button>
+ 
+          <mat-icon matSuffix style="color: green; margin-right: 8px;" *ngIf="isEmailVerified">check_circle</mat-icon>
+ 
+          <mat-error *ngIf="form.get('email')?.hasError('email')">Enter a valid email</mat-error>
+          <mat-error *ngIf="form.get('email')?.hasError('required')">Required</mat-error>
+        </mat-form-field>
+ 
+        <!-- OTP Input Block -->
+  <div *ngIf="isOtpSent && !isEmailVerified" class="otp-container">
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Verification Code</mat-label>
+    <input matInput [(ngModel)]="otpValue" [ngModelOptions]="{standalone: true}" maxlength="6">
+    <button type="button" matSuffix mat-flat-button color="accent" class="verify-btn" (click)="verifyOtp()">
+      VERIFY
+    </button>
+  </mat-form-field>
+ 
+  <!-- This is the part moving into the 'white area' -->
+  <div class="resend-section">
+    <small>Didn't receive the code?
+      <a href="javascript:void(0)" (click)="sendOtp()" class="resend-link">Resend OTP</a>
+    </small>
+  </div>
+</div>
+ 
+       
+ 
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Password</mat-label>
+          <input matInput formControlName="password" [type]="hidePassword ? 'password' : 'text'">
+          <mat-icon matPrefix>lock</mat-icon>
+          <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword">
+            <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          <mat-error *ngIf="form.get('password')?.hasError('minlength')">Minimum 6 characters</mat-error>
+          <mat-error *ngIf="form.get('password')?.hasError('required')">Required</mat-error>
+        </mat-form-field>
+ 
+        <div class="row">
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Phone</mat-label>
+            <input matInput formControlName="phone">
+            <mat-icon matPrefix>phone</mat-icon>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Blood Group</mat-label>
+            <mat-select formControlName="bloodGroup">
+              <mat-option *ngFor="let bg of bloodGroups" [value]="bg">{{ bg }}</mat-option>
+            </mat-select>
+            <mat-icon matPrefix>bloodtype</mat-icon>
+          </mat-form-field>
+        </div>
+ 
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>City</mat-label>
+          <input matInput formControlName="city">
+          <mat-icon matPrefix>location_city</mat-icon>
+        </mat-form-field>
+ 
+        <button mat-raised-button color="primary" type="submit" class="full-width submit-btn" [disabled]="loading">
+          <mat-spinner diameter="20" *ngIf="loading"></mat-spinner>
+          <span *ngIf="!loading">Create Account</span>
+        </button>
+      </form>
+ 
+      <div class="auth-footer">
+        <p>Already have an account? <a routerLink="/login">Sign In</a></p>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

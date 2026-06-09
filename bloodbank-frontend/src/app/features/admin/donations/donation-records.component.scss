@@ -1,0 +1,5 @@
+.add-form { margin-bottom: 24px; border-radius: 12px !important; border-left: 4px solid #c0392b; }
+.form-row { display: flex; gap: 12px; flex-wrap: wrap; mat-form-field { flex: 1; min-width: 180px; } }
+.form-actions { display: flex; justify-content: flex-end; gap: 8px; }
+.no-data { text-align: center; padding: 24px; color: #9e9e9e; }
+.loading-center { display: flex; justify-content: center; padding: 40px; }
